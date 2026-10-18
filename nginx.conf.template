@@ -7,11 +7,9 @@ http {
 
     server {
         listen ${PORT};
-        
-        # Railway ၏ Domain များအားလုံးကို လက်ခံရန်
         server_name _;
 
-        # Railway Health Check အတွက် (ဤနေရာတွင် အမြဲတမ်း 200 ပြန်ပေးရမည်)
+        # Railway Health Check အတွက်
         location = /health {
             access_log off;
             add_header Content-Type text/plain;
@@ -24,23 +22,17 @@ http {
             proxy_http_version 1.1;
             proxy_set_header Upgrade $http_upgrade;
             proxy_set_header Connection "upgrade";
-            proxy_set_header Host $http_host; # $host အစား $http_host ကို သုံးပါ
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
+            # proxy_set_header Host $host; # ဒါကို ဖျက်ပါ
             proxy_read_timeout 300s;
         }
 
-        # ဟောင်းနွဲ့နေသော လမ်းကြောင်း
+        # ဟောင်းနွဲ့နေတဲ့ လမ်းကြောင်း
         location = /vless-ws {
             proxy_pass http://127.0.0.1:10000${VLESS_WS_PATH};
             proxy_http_version 1.1;
             proxy_set_header Upgrade $http_upgrade;
             proxy_set_header Connection "upgrade";
-            proxy_set_header Host $http_host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
+            # proxy_set_header Host $host; # ဒါကို ဖျက်ပါ
             proxy_read_timeout 300s;
         }
 
@@ -50,12 +42,10 @@ http {
             proxy_http_version 1.1;
             proxy_set_header Upgrade $http_upgrade;
             proxy_set_header Connection "upgrade";
-            proxy_set_header Host $http_host; # ဤနေရာတွင် $http_host ကို သုံးရန် အရေးကြီးသည်
+            # proxy_set_header Host $host; # ဒါကို ဖျက်ပါ
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header X-Forwarded-Proto $scheme;
-            proxy_set_header X-Forwarded-Host $http_host;
-            proxy_set_header X-Forwarded-Port $server_port;
         }
     }
 }
